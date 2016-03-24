@@ -44,7 +44,6 @@ public class OrderManagerTest {
 
     @Test
     public void testWithQueue() {
-
         File queuePath = new File(OS.TARGET, "testWithQueue-" + System.nanoTime());
         try {
             try (SingleChronicleQueue queue = SingleChronicleQueueBuilder.binary(queuePath).build()) {
@@ -62,7 +61,7 @@ public class OrderManagerTest {
                 orderManager.onOrderIdea(new OrderIdea("EURUSD", Side.Buy, 1.1165, 1e6)); // expected to trigger
             }
 
-            // what we expect to happen
+// what we expect to happen
             OrderListener listener = createMock(OrderListener.class);
             listener.onOrder(new Order("EURUSD", Side.Buy, 1.1167, 1_000_000));
             replay(listener);
@@ -80,7 +79,7 @@ public class OrderManagerTest {
 
             verify(listener);
         } finally {
-            IOTools.shallowDeleteDirWithFiles(queuePath.getAbsolutePath());
+            IOTools.shallowDeleteDirWithFiles(queuePath);
         }
     }
 }
