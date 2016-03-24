@@ -36,6 +36,7 @@
         <dependency>
             <groupId>net.openhft</groupId>
             <artifactId>chronicle-queue</artifactId>
+            <version>4.1.1-SNAPSHOT</version>
         </dependency>
 
         <!-- for TESTING -->
