@@ -1,6 +1,6 @@
 package net.openhft.samples.microservices;
 
-import net.openhft.affinity.Affinity;
+import net.openhft.affinity.AffinityLock;
 import net.openhft.chronicle.core.Jvm;
 import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.core.io.IOTools;
@@ -27,6 +27,7 @@ import static org.junit.Assert.assertTrue;
 @State(Scope.Thread)
 public class ComponentsBenchmark {
 
+    SidedPrice sidedPrice = new SidedPrice(null, 0, null, 0, 0);
     private File upQueuePath, downQueuePath;
     private SingleChronicleQueue upQueue, downQueue;
     private SidedMarketDataListener smdWriter;
@@ -39,8 +40,20 @@ public class ComponentsBenchmark {
 //        if (true) System.exit(0);
         ComponentsBenchmark main = new ComponentsBenchmark();
         if (OS.isLinux())
-            Affinity.setAffinity(2);
-        if (Jvm.isDebug()) {
+            AffinityLock.acquireLock();
+
+        if (Jvm.isFlightRecorder()) {
+            // -verbose:gc  -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=dumponexit=true,filename=myrecording.jfr,settings=profile -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints
+            System.out.println("Detected Flight Recorder");
+            main.setup();
+            long start = System.currentTimeMillis();
+            while (start + 60e3 > System.currentTimeMillis()) {
+                for (int i = 0; i < 1000; i++)
+                    main.benchmarkComponents();
+            }
+            main.tearDown();
+
+        } else if (Jvm.isDebug()) {
             for (int i = 0; i < 10; i++) {
                 runAll(main, Setup.class);
                 runAll(main, Benchmark.class);
@@ -72,11 +85,12 @@ public class ComponentsBenchmark {
 
     @Setup
     public void setup() {
-        upQueuePath = new File(OS.TARGET, "ComponentsBenchmark-up-" + System.nanoTime());
-        upQueue = SingleChronicleQueueBuilder.binary(upQueuePath).build();
+        String target = Jvm.isDebug() ? OS.TARGET : OS.TMP;
+        upQueuePath = new File(target, "ComponentsBenchmark-up-" + System.nanoTime());
+        upQueue = SingleChronicleQueueBuilder.binary(upQueuePath).blockSize(256 << 10).build();
         smdWriter = upQueue.createAppender().methodWriter(SidedMarketDataListener.class);
 
-        downQueuePath = new File(OS.TARGET, "ComponentsBenchmark-down-" + System.nanoTime());
+        downQueuePath = new File(target, "ComponentsBenchmark-down-" + System.nanoTime());
         downQueue = SingleChronicleQueueBuilder.binary(downQueuePath).build();
         MarketDataListener mdWriter = downQueue.createAppender().methodWriter(MarketDataListener.class);
 
@@ -98,16 +112,16 @@ public class ComponentsBenchmark {
     public void benchmarkComponents() {
         switch (counter++ & 3) {
             case 0:
-                smdWriter.onSidedPrice(new SidedPrice("EURUSD", 123456789000L, Side.Sell, 1.1172, 1e6));
+                smdWriter.onSidedPrice(sidedPrice.init("EURUSD", 123456789000L, Side.Sell, 1.1172, 1e6));
                 break;
             case 1:
-                smdWriter.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1160, 1e6));
+                smdWriter.onSidedPrice(sidedPrice.init("EURUSD", 123456789100L, Side.Buy, 1.1160, 1e6));
                 break;
             case 2:
-                smdWriter.onSidedPrice(new SidedPrice("EURUSD", 123456789000L, Side.Sell, 1.1172, 2e6));
+                smdWriter.onSidedPrice(sidedPrice.init("EURUSD", 123456789000L, Side.Sell, 1.1172, 2e6));
                 break;
             case 3:
-                smdWriter.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1160, 2e6));
+                smdWriter.onSidedPrice(sidedPrice.init("EURUSD", 123456789100L, Side.Buy, 1.1160, 2e6));
                 break;
         }
         assertTrue(reader.readOne());

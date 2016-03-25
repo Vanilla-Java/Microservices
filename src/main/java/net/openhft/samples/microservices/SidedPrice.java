@@ -12,10 +12,15 @@ public class SidedPrice extends AbstractMarshallable {
     double price, quantity;
 
     public SidedPrice(String symbol, long timestamp, Side side, double price, double quantity) {
+        init(symbol, timestamp, side, price, quantity);
+    }
+
+    public SidedPrice init(String symbol, long timestamp, Side side, double price, double quantity) {
         this.symbol = symbol;
         this.timestamp = timestamp;
         this.side = side;
         this.price = price;
         this.quantity = quantity;
+        return this;
     }
 }
