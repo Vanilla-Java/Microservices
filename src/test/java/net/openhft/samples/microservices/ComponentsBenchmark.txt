@@ -1,0 +1,78 @@
+[main] INFO net.openhft.affinity.AffinityLock - Assigning cpu 31 to Thread[main,5,main]
+measurementTime: 3 secs
+# JMH 1.11.3 (released 72 days ago)
+# VM version: JDK 1.8.0_66, VM 25.66-b17
+# VM invoker: /mnt/opt/jdk1.8.0_66/jre/bin/java
+# VM options: -verbose:gc -Xmx8g -Xmn4g -Didea.launcher.port=7536 -Didea.launcher.bin.path=/mnt/opt/idea-IC-143.1821.5/bin -Dfile.encoding=UTF-8
+# Warmup: 8 iterations, 1 s each
+# Measurement: 20 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Sampling time
+# Benchmark: net.openhft.samples.microservices.ComponentsBenchmark.benchmarkComponents
+
+# Run progress: 0.00% complete, ETA 00:01:08
+# Fork: 1 of 1
+# Warmup Iteration   1: up-q /tmp/ComponentsBenchmark-up-45470867971764
+n = 6399, mean = 162 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 6, 11, 35, 61, 970, 44014, 87949, 87949 us/op
+# Warmup Iteration   2: n = 21106, mean = 22 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 5, 6, 9, 267, 65371, 88080 us/op
+# Warmup Iteration   3: n = 18551, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 6, 15, 19, 24 us/op
+# Warmup Iteration   4: n = 17681, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 9, 558, 986 us/op
+# Warmup Iteration   5: n = 17874, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 11, 25, 45 us/op
+# Warmup Iteration   6: n = 19945, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 6, 6, 8, 14, 18, 18 us/op
+# Warmup Iteration   7: n = 19909, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 2, 3, 3, 5, 5, 12, 1301, 3805 us/op
+# Warmup Iteration   8: n = 10269, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 5, 6, 7, 15, 28, 28 us/op
+Iteration   1: n = 30122, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 7, 16, 24 us/op
+Iteration   2: n = 29739, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 9, 16, 18 us/op
+Iteration   3: n = 29501, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 9, 16, 19 us/op
+Iteration   4: n = 29710, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 10, 16, 27 us/op
+Iteration   5: n = 29439, mean = 6 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 5, 6, 7, 8, 13, 17, 21, 27 us/op
+Iteration   6: n = 29621, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 10, 47, 430 us/op
+Iteration   7: n = 29754, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 10, 18, 20 us/op
+Iteration   8: n = 29791, mean = 6 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 5, 6, 7, 8, 13, 17, 23, 25 us/op
+Iteration   9: n = 29815, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 8, 16, 247 us/op
+Iteration  10: n = 29835, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 8, 18, 439 us/op
+Iteration  11: n = 29588, mean = 4 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 6, 6, 8, 16, 422, 433 us/op
+Iteration  12: n = 29308, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 9, 17, 19 us/op
+Iteration  13: n = 28423, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 8, 14, 15 us/op
+Iteration  14: n = 28587, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 10, 18, 213 us/op
+Iteration  15: n = 28621, mean = 7 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 5, 6, 9, 9, 15, 20, 26, 34 us/op
+Iteration  16: n = 28502, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 11, 16, 39 us/op
+Iteration  17: n = 29105, mean = 4 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 6, 6, 8, 16, 52, 404 us/op
+Iteration  18: n = 29354, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 10, 16, 402 us/op
+Iteration  19: n = 29887, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 5, 5, 10, 21, 431 us/op
+Iteration  20: n = 29839, mean = 3 us/op, p{0.00, 0.50, 0.90, 0.95, 0.99, 0.999, 0.9999, 1.00} = 3, 3, 3, 3, 5, 8, 16, 18 us/op
+
+
+Result "benchmarkComponents":
+  N = 588541
+  mean =      3.455 ±(99.9%) 0.010 us/op
+
+  Histogram, us/op:
+    [  0.000,  50.000) = 588528
+    [ 50.000, 100.000) = 0
+    [100.000, 150.000) = 0
+    [150.000, 200.000) = 1
+    [200.000, 250.000) = 2
+    [250.000, 300.000) = 0
+    [300.000, 350.000) = 0
+    [350.000, 400.000) = 1
+    [400.000, 450.000) = 9
+
+  Percentiles, us/op:
+      p(0.0000) =      2.552 us/op
+     p(50.0000) =      2.796 us/op
+     p(90.0000) =      5.600 us/op
+     p(95.0000) =      5.720 us/op
+     p(99.0000) =      8.496 us/op
+     p(99.9000) =     15.232 us/op
+     p(99.9900) =     19.977 us/op
+     p(99.9990) =    422.475 us/op
+     p(99.9999) =    438.784 us/op
+    p(100.0000) =    438.784 us/op
+
+
+# Run complete. Total time: 00:01:09
+
+Benchmark                                  Mode     Cnt  Score   Error  Units
+ComponentsBenchmark.benchmarkComponents  sample  588541  3.455 ± 0.010  us/op

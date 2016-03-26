@@ -61,13 +61,12 @@ public class ComponentsBenchmark {
             }
 
         } else {
-            int time = Boolean.getBoolean("longTest") ? 30 : 2;
+            int time = Boolean.getBoolean("longTest") ? 30 : 3;
             System.out.println("measurementTime: " + time + " secs");
             Options opt = new OptionsBuilder()
                     .include(ComponentsBenchmark.class.getSimpleName())
                     .warmupIterations(8)
                     .forks(1)
-                    .measurementIterations(8)
                     .mode(Mode.SampleTime)
                     .measurementTime(TimeValue.seconds(time))
                     .timeUnit(TimeUnit.MICROSECONDS)
@@ -85,9 +84,9 @@ public class ComponentsBenchmark {
 
     @Setup
     public void setup() {
-        String target = Jvm.isDebug() ? OS.TARGET : OS.TMP;
+        String target = OS.TMP;
         upQueuePath = new File(target, "ComponentsBenchmark-up-" + System.nanoTime());
-        upQueue = SingleChronicleQueueBuilder.binary(upQueuePath).blockSize(256 << 10).build();
+        upQueue = SingleChronicleQueueBuilder.binary(upQueuePath).build();
         smdWriter = upQueue.createAppender().methodWriter(SidedMarketDataListener.class);
 
         downQueuePath = new File(target, "ComponentsBenchmark-down-" + System.nanoTime());
@@ -123,7 +122,7 @@ public class ComponentsBenchmark {
             case 3:
                 smdWriter.onSidedPrice(sidedPrice.init("EURUSD", 123456789100L, Side.Buy, 1.1160, 2e6));
                 break;
-        }
+    }
         assertTrue(reader.readOne());
     }
 }
