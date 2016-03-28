@@ -2,6 +2,7 @@ package net.openhft.samples.microservices;
 
 import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.core.io.IOTools;
+import net.openhft.chronicle.queue.ExcerptHistory;
 import net.openhft.chronicle.queue.MethodReader;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
@@ -10,8 +11,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by peter on 24/03/16.
@@ -80,6 +80,68 @@ public class OrderManagerTest {
             verify(listener);
         } finally {
             IOTools.shallowDeleteDirWithFiles(queuePath);
+        }
+    }
+
+
+    @Test
+    public void testWithQueueHistory() {
+        File queuePath = new File(OS.TARGET, "testWithQueueHistory-" + System.nanoTime());
+        File queuePath2 = new File(OS.TARGET, "testWithQueueHistory-down-" + System.nanoTime());
+        try {
+            try (SingleChronicleQueue out = SingleChronicleQueueBuilder.binary(queuePath).build()) {
+                OrderIdeaListener orderManager = out.createAppender()
+                        .methodWriterBuilder(OrderIdeaListener.class)
+                        .additionalInterfaces(MarketDataListener.class)
+                        .recordHistory(true)
+                        .get();
+                SidedMarketDataCombiner combiner = new SidedMarketDataCombiner((MarketDataListener) orderManager);
+
+                // events in
+                orderManager.onOrderIdea(new OrderIdea("EURUSD", Side.Buy, 1.1180, 2e6)); // not expected to trigger
+
+                combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789000L, Side.Sell, 1.1172, 2e6));
+                combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1160, 2e6));
+
+                combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1167, 2e6));
+
+                orderManager.onOrderIdea(new OrderIdea("EURUSD", Side.Buy, 1.1165, 1e6)); // expected to trigger
+            }
+
+            try (SingleChronicleQueue in = SingleChronicleQueueBuilder.binary(queuePath)
+                    .sourceId(1)
+                    .build();
+                 SingleChronicleQueue out = SingleChronicleQueueBuilder.binary(queuePath2).build()) {
+
+                OrderListener listener = out.createAppender()
+                        .methodWriterBuilder(OrderListener.class)
+                        .recordHistory(true)
+                        .get();
+                // build our scenario
+                OrderManager orderManager = new OrderManager(listener);
+                MethodReader reader = in.createTailer().methodReader(orderManager);
+                for (int i = 0; i < 5; i++)
+                    assertTrue(reader.readOne());
+
+                assertFalse(reader.readOne());
+                System.out.println(out.dump());
+            }
+
+            try (SingleChronicleQueue in = SingleChronicleQueueBuilder.binary(queuePath2).sourceId(2).build()) {
+                MethodReader reader = in.createTailer().methodReader((OrderListener) order -> {
+                    ExcerptHistory x = ExcerptHistory.get();
+                    // Note: this will have one extra timing, the time it was written to the console.
+                    System.out.println(x);
+                    assertEquals(1, x.sourceId(0));
+                    assertEquals(2, x.sourceId(1));
+                    assertEquals(4, x.timings());
+                });
+                assertTrue(reader.readOne());
+                assertFalse(reader.readOne());
+            }
+        } finally {
+            IOTools.shallowDeleteDirWithFiles(queuePath);
+            IOTools.shallowDeleteDirWithFiles(queuePath2);
         }
     }
 }

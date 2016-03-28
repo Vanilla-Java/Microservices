@@ -122,7 +122,7 @@ public class ComponentsBenchmark {
             case 3:
                 smdWriter.onSidedPrice(sidedPrice.init("EURUSD", 123456789100L, Side.Buy, 1.1160, 2e6));
                 break;
-    }
+        }
         assertTrue(reader.readOne());
     }
 }
