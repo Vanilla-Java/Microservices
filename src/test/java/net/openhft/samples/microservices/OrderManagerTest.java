@@ -4,8 +4,10 @@ import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.core.io.IOTools;
 import net.openhft.chronicle.queue.ExcerptHistory;
 import net.openhft.chronicle.queue.MethodReader;
+import net.openhft.chronicle.queue.RollCycles;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -138,6 +140,53 @@ public class OrderManagerTest {
                 });
                 assertTrue(reader.readOne());
                 assertFalse(reader.readOne());
+            }
+        } finally {
+            IOTools.shallowDeleteDirWithFiles(queuePath);
+            IOTools.shallowDeleteDirWithFiles(queuePath2);
+        }
+    }
+
+    @Test
+    @Ignore("TODO FIX")
+    public void testRestartingAService() {
+        File queuePath = new File(OS.TARGET, "testRestartingAService-" + System.nanoTime());
+        File queuePath2 = new File(OS.TARGET, "testRestartingAService-down-" + System.nanoTime());
+        try {
+            try (SingleChronicleQueue out = SingleChronicleQueueBuilder.binary(queuePath)
+                    .rollCycle(RollCycles.TEST_DAILY)
+                    .build()) {
+                SidedMarketDataListener combiner = out.createAppender()
+                        .methodWriterBuilder(SidedMarketDataListener.class)
+                        .recordHistory(true)
+                        .get();
+
+                combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789000L, Side.Sell, 1.1172, 2e6));
+                combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1160, 2e6));
+
+                combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Sell, 1.1173, 2.5e6));
+                combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1167, 1.5e6));
+            }
+
+            for (int i = 0; i < 4; i++) {
+                // read one message at a time
+                try (SingleChronicleQueue in = SingleChronicleQueueBuilder.binary(queuePath)
+                        .sourceId(1)
+                        .build();
+                     SingleChronicleQueue out = SingleChronicleQueueBuilder.binary(queuePath2)
+                             .rollCycle(RollCycles.TEST_DAILY)
+                             .build()) {
+
+                    MarketDataListener mdListener = out.createAppender()
+                            .methodWriterBuilder(MarketDataListener.class)
+                            .recordHistory(true)
+                            .get();
+                    SidedMarketDataCombiner combiner = new SidedMarketDataCombiner(mdListener);
+                    MethodReader reader = in.createTailer().afterLastWritten(out).methodReader(combiner);
+                    assertTrue(reader.readOne());
+
+                    System.out.println("OUT:\n" + out.dump());
+                }
             }
         } finally {
             IOTools.shallowDeleteDirWithFiles(queuePath);
