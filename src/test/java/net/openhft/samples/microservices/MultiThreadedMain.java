@@ -99,9 +99,11 @@ public class MultiThreadedMain {
         @Override
         public void simpleCall(SimpleData data) {
             data.number *= 10;
+
             long time = System.nanoTime();
             nanoSampler.sampleNanos(time - data.ts);
             data.ts = time;
+
             output.simpleCall(data);
             endToEnd.sampleNanos(System.nanoTime() - data.ts0);
         }
