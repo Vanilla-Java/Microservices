@@ -5,10 +5,10 @@ import net.openhft.chronicle.core.util.NanoSampler;
 /**
  * Created by peter on 02/04/16.
  */
-class ServiceImpl implements MultiThreadedMain.Service, ServiceHandler<MultiThreadedMain.Service> {
+class ServiceImpl implements Service, ServiceHandler<Service> {
     private final NanoSampler nanoSampler;
     private final NanoSampler endToEnd;
-    private MultiThreadedMain.Service output;
+    private Service output;
 
     public ServiceImpl(NanoSampler nanoSampler) {
         this(nanoSampler, t -> {
@@ -21,7 +21,7 @@ class ServiceImpl implements MultiThreadedMain.Service, ServiceHandler<MultiThre
     }
 
     @Override
-    public void init(MultiThreadedMain.Service output) {
+    public void init(Service output) {
         this.output = output;
     }
 

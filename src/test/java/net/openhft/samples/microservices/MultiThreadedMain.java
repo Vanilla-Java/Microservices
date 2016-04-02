@@ -30,10 +30,6 @@ public class MultiThreadedMain {
         new JLBH(jlbhOptions).start();
     }
 
-    interface Service {
-        void simpleCall(SimpleData data);
-    }
-
     static class MultiThreadedMainTask implements JLBHTask {
 
         UUID uuid = UUID.randomUUID();
