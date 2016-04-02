@@ -45,7 +45,7 @@ public class MultiThreadedMain {
         String queueOut = OS.TMP + "/MultiThreadedMain/" + uuid + "/pathOut";
         int counter = 1;
         private Service serviceIn;
-        private ServiceWrapper<ServiceImpl, Service> service2, service3, serviceOut;
+        private ServiceWrapper<ServiceImpl> service2, service3, serviceOut;
         private SimpleData data;
 
         @Override
