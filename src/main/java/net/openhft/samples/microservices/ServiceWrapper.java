@@ -15,17 +15,17 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by peter on 01/04/16.
  */
-public class ServiceWrapper<I extends ServiceHandler<O>, O> implements Runnable, Closeable {
+public class ServiceWrapper<I extends ServiceHandler> implements Runnable, Closeable {
     private final ChronicleQueue inputQueue, outputQueue;
     private final MethodReader serviceIn;
-    private final O serviceOut;
+    private final Object serviceOut;
     private final Thread thread;
     private final Pauser pauser = new LongPauser(1, 100_000, 1, 20, TimeUnit.MILLISECONDS);
 
     private volatile boolean closed = false;
 
     public ServiceWrapper(String inputPath, String outputPath, I serviceImpl) {
-        Class<O> outClass = ObjectUtils.getTypeFor(serviceImpl.getClass(), ServiceHandler.class);
+        Class outClass = ObjectUtils.getTypeFor(serviceImpl.getClass(), ServiceHandler.class);
 
         outputQueue = SingleChronicleQueueBuilder.binary(outputPath).build();
         serviceOut = outputQueue.createAppender().methodWriter(outClass);
