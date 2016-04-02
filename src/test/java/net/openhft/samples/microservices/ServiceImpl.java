@@ -31,9 +31,9 @@ class ServiceImpl implements Service, ServiceHandler<Service> {
 
         long time = System.nanoTime();
         nanoSampler.sampleNanos(time - data.ts);
-        data.ts = time;
+        data.ts = time; // the start time for the next stage.
 
-        output.simpleCall(data);
+        output.simpleCall(data); // pass the data to the next stage.
         endToEnd.sampleNanos(System.nanoTime() - data.ts0);
     }
 }

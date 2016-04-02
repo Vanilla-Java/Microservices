@@ -32,25 +32,22 @@ public class MultiThreadedMain {
 
     static class MultiThreadedMainTask implements JLBHTask {
 
+        int counter = 1;
         UUID uuid = UUID.randomUUID();
         String queueIn = OS.TMP + "/MultiThreadedMain/" + uuid + "/pathIn";
         String queue2 = OS.TMP + "/MultiThreadedMain/" + uuid + "/stage2";
         String queue3 = OS.TMP + "/MultiThreadedMain/" + uuid + "/stage3";
         String queueOut = OS.TMP + "/MultiThreadedMain/" + uuid + "/pathOut";
-        int counter = 1;
         private Service serviceIn;
         private ServiceWrapper<ServiceImpl> service2, service3, serviceOut;
-        private SimpleData data;
+        private SimpleData data = new SimpleData();
 
         @Override
         public void init(JLBH jlbh) {
-
             serviceIn = SingleChronicleQueueBuilder.binary(queueIn).build().createAppender().methodWriter(Service.class);
             service2 = new ServiceWrapper<>(queueIn, queue2, new ServiceImpl(jlbh.addProbe("Service 2")));
             service3 = new ServiceWrapper<>(queue2, queue3, new ServiceImpl(jlbh.addProbe("Service 3")));
             serviceOut = new ServiceWrapper<>(queue3, queueOut, new ServiceImpl(jlbh.addProbe("Service Out"), jlbh));
-
-            data = new SimpleData();
         }
 
         @Override
