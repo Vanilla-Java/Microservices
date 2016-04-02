@@ -2,6 +2,7 @@ package net.openhft.samples.microservices;
 
 import net.openhft.affinity.AffinityLock;
 import net.openhft.chronicle.core.io.Closeable;
+import net.openhft.chronicle.core.util.ObjectUtils;
 import net.openhft.chronicle.queue.ChronicleQueue;
 import net.openhft.chronicle.queue.MethodReader;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
@@ -23,7 +24,9 @@ public class ServiceWrapper<I extends ServiceHandler<O>, O> implements Runnable,
 
     private volatile boolean closed = false;
 
-    public ServiceWrapper(String inputPath, String outputPath, I serviceImpl, Class<O> outClass) {
+    public ServiceWrapper(String inputPath, String outputPath, I serviceImpl) {
+        Class<O> outClass = ObjectUtils.getTypeFor(serviceImpl.getClass(), ServiceHandler.class);
+
         outputQueue = SingleChronicleQueueBuilder.binary(outputPath).build();
         serviceOut = outputQueue.createAppender().methodWriter(outClass);
         serviceImpl.init(serviceOut);
