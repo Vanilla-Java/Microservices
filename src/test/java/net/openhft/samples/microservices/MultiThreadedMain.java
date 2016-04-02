@@ -5,9 +5,7 @@ import net.openhft.chronicle.core.io.IOTools;
 import net.openhft.chronicle.core.jlbh.JLBH;
 import net.openhft.chronicle.core.jlbh.JLBHOptions;
 import net.openhft.chronicle.core.jlbh.JLBHTask;
-import net.openhft.chronicle.core.util.NanoSampler;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
-import net.openhft.chronicle.wire.AbstractMarshallable;
 
 import java.util.UUID;
 
@@ -74,44 +72,5 @@ public class MultiThreadedMain {
             IOTools.deleteDirWithFiles(queue3, 2);
             IOTools.deleteDirWithFiles(queueOut, 2);
         }
-    }
-
-    static class ServiceImpl implements Service, ServiceHandler<Service> {
-        private final NanoSampler nanoSampler;
-        private final NanoSampler endToEnd;
-        private Service output;
-
-        public ServiceImpl(NanoSampler nanoSampler) {
-            this(nanoSampler, t -> {
-            });
-        }
-
-        public ServiceImpl(NanoSampler nanoSampler, NanoSampler endToEnd) {
-            this.nanoSampler = nanoSampler;
-            this.endToEnd = endToEnd;
-        }
-
-        @Override
-        public void init(Service output) {
-            this.output = output;
-        }
-
-        @Override
-        public void simpleCall(SimpleData data) {
-            data.number *= 10;
-
-            long time = System.nanoTime();
-            nanoSampler.sampleNanos(time - data.ts);
-            data.ts = time;
-
-            output.simpleCall(data);
-            endToEnd.sampleNanos(System.nanoTime() - data.ts0);
-        }
-    }
-
-    static class SimpleData extends AbstractMarshallable {
-        String text;
-        long number;
-        long ts0, ts;
     }
 }
