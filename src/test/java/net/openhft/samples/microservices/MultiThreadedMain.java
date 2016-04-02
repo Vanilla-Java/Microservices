@@ -15,8 +15,8 @@ import java.util.UUID;
  * Created by peter on 01/04/16.
  */
 public class MultiThreadedMain {
-    private static final int MESSAGE_COUNT = Integer.getInteger("message.count", 2_000_000);
-    private static final int THROUGHPUT = Integer.getInteger("message.throughput", 50_000);
+    private static final int THROUGHPUT = Integer.getInteger("message.throughput", 450_000);
+    private static final int MESSAGE_COUNT = Integer.getInteger("message.count", THROUGHPUT * 120);
     private static final boolean ACCOUNT_FOR_COORDINATED_OMMISSION = true;
 
     public static void main(String[] args) {
@@ -24,7 +24,7 @@ public class MultiThreadedMain {
                 .warmUpIterations(50_000)
                 .iterations(MESSAGE_COUNT)
                 .throughput(THROUGHPUT)
-                .runs(5)
+                .runs(6)
                 .recordOSJitter(true)
                 .pauseAfterWarmupMS(500)
                 .accountForCoordinatedOmmission(ACCOUNT_FOR_COORDINATED_OMMISSION)
@@ -65,8 +65,8 @@ public class MultiThreadedMain {
             data.number = counter++;
             data.ts0 = data.ts = System.nanoTime();
             serviceIn.simpleCall(data);
-            if (counter % 100000 == 0)
-                System.out.println(counter + ", " + service2.messageCount() + ", " + service3.messageCount() + ", " + serviceOut.messageCount());
+//            if (counter % 100000 == 0)
+//                System.out.println(counter + ", " + service2.messageCount() + ", " + service3.messageCount() + ", " + serviceOut.messageCount());
         }
 
         @Override
