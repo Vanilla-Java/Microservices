@@ -22,7 +22,6 @@ public class ServiceWrapper<I extends ServiceHandler<O>, O> implements Runnable,
     private final Pauser pauser = new LongPauser(1, 100_000, 1, 20, TimeUnit.MILLISECONDS);
 
     private volatile boolean closed = false;
-    private volatile long messageCount = 0;
 
     public ServiceWrapper(String inputPath, String outputPath, I serviceImpl, Class<O> outClass) {
         outputQueue = SingleChronicleQueueBuilder.binary(outputPath).build();
@@ -43,7 +42,6 @@ public class ServiceWrapper<I extends ServiceHandler<O>, O> implements Runnable,
         try {
             while (!closed) {
                 if (serviceIn.readOne()) {
-                    messageCount++;
                     pauser.reset();
                 } else {
                     pauser.pause();
@@ -52,10 +50,6 @@ public class ServiceWrapper<I extends ServiceHandler<O>, O> implements Runnable,
         } finally {
             lock.release();
         }
-    }
-
-    public long messageCount() {
-        return messageCount;
     }
 
     @Override

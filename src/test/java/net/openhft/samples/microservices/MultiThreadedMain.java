@@ -65,8 +65,6 @@ public class MultiThreadedMain {
             data.number = counter++;
             data.ts0 = data.ts = System.nanoTime();
             serviceIn.simpleCall(data);
-//            if (counter % 100000 == 0)
-//                System.out.println(counter + ", " + service2.messageCount() + ", " + service3.messageCount() + ", " + serviceOut.messageCount());
         }
 
         @Override
