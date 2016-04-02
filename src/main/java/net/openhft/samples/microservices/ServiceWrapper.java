@@ -20,7 +20,7 @@ public class ServiceWrapper<I extends ServiceHandler> implements Runnable, Close
     private final MethodReader serviceIn;
     private final Object serviceOut;
     private final Thread thread;
-    private final Pauser pauser = new LongPauser(1, 100_000, 1, 20, TimeUnit.MILLISECONDS);
+    private final Pauser pauser = new LongPauser(1, 100, 500, 10_000, TimeUnit.MICROSECONDS);
 
     private volatile boolean closed = false;
 
