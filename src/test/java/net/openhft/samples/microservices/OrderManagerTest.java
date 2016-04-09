@@ -84,7 +84,6 @@ public class OrderManagerTest {
         }
     }
 
-
     @Test
     public void testWithQueueHistory() {
         File queuePath = new File(OS.TARGET, "testWithQueueHistory-" + System.nanoTime());
