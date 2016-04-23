@@ -36,7 +36,7 @@ public class HelloWorldClientMain {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            while (System.currentTimeMillis() < lastUpdate.get() + 20)
+            while (System.currentTimeMillis() < lastUpdate.get() + 30)
                 Thread.yield();
 
             out.print("Chat ");
