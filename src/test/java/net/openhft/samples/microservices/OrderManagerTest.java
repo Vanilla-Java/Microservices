@@ -2,11 +2,11 @@ package net.openhft.samples.microservices;
 
 import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.core.io.IOTools;
-import net.openhft.chronicle.queue.ExcerptHistory;
-import net.openhft.chronicle.queue.MethodReader;
 import net.openhft.chronicle.queue.RollCycles;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
+import net.openhft.chronicle.wire.MessageHistory;
+import net.openhft.chronicle.wire.MethodReader;
 import org.junit.Test;
 
 import java.io.File;
@@ -129,7 +129,7 @@ public class OrderManagerTest {
 
             try (SingleChronicleQueue in = SingleChronicleQueueBuilder.binary(queuePath2).sourceId(2).build()) {
                 MethodReader reader = in.createTailer().methodReader((OrderListener) order -> {
-                    ExcerptHistory x = ExcerptHistory.get();
+                    MessageHistory x = MessageHistory.get();
                     // Note: this will have one extra timing, the time it was written to the console.
                     System.out.println(x);
                     assertEquals(1, x.sourceId(0));

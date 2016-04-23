@@ -4,10 +4,10 @@ import net.openhft.affinity.AffinityLock;
 import net.openhft.chronicle.core.io.Closeable;
 import net.openhft.chronicle.core.util.ObjectUtils;
 import net.openhft.chronicle.queue.ChronicleQueue;
-import net.openhft.chronicle.queue.MethodReader;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 import net.openhft.chronicle.threads.LongPauser;
 import net.openhft.chronicle.threads.Pauser;
+import net.openhft.chronicle.wire.MethodReader;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
