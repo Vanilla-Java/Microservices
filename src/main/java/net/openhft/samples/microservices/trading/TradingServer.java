@@ -13,17 +13,17 @@ public class TradingServer {
 
     public TradingServer(int port) {
         this.server = new JettyWebSocketServer(port);
-        server.addService("/*", IMarketData.class, GUIGatewayPublisher::new);
+        server.addService("/*", GatewayPublisher.class, GUIGatewayPublisher::new);
         server.start();
     }
 
     static class GUIGatewayPublisher implements GUIGateway{
 
-        private IMarketData md;
+        private GatewayPublisher gatewayPublisher;
         private volatile boolean isStopped = false;
 
-        GUIGatewayPublisher(IMarketData md) {
-            this.md = md;
+        GUIGatewayPublisher(GatewayPublisher gatewayPublisher) {
+            this.gatewayPublisher = gatewayPublisher;
             System.out.println("New connection");
         }
 
@@ -36,15 +36,17 @@ public class TradingServer {
                     while (!isStopped) {
                         Random r = new Random();
                         int[] fourRandomNumbers = r.ints(4, 0, 1001).toArray();
-                        md.symbol("GBP/USD");
-                        md.bidPrice(fourRandomNumbers[0]);
-                        md.bidQuantity(fourRandomNumbers[1]);
-                        md.askPrice(fourRandomNumbers[2]);
-                        md.askQuantity(fourRandomNumbers[3]);
 
-                        System.out.println("Message sent " + md);
+                        MarketData md  = new MarketData("GBP/USD",
+                                fourRandomNumbers[0],
+                                fourRandomNumbers[1],
+                                fourRandomNumbers[2],
+                                fourRandomNumbers[3]);
+
+                        gatewayPublisher.marketData(md);
+
+                        System.out.println(md);
                         Jvm.pause(1000);
-
                     }
                 }).start();
             }
@@ -52,7 +54,9 @@ public class TradingServer {
 
         @Override
         public void newOrder(Order order) {
-            System.out.println("New order received " + order);
+            OrderStatus orderStatus = new OrderStatus(order);
+            System.out.println("New orderStatus received " + orderStatus);
+            gatewayPublisher.orderStatus(orderStatus);
         }
     }
 

@@ -11,4 +11,14 @@ public class OrderStatus extends Order {
         this.quantityFilled = quantityFilled;
         this.quantityOutstanding = quantityOutstanding;
     }
+
+    public OrderStatus(Order order) {
+        this.symbol = order.symbol;
+        this.side = order.side;
+        this.orderId = order.orderId;
+        this.limitPrice = order.limitPrice;
+        this.quantity = order.quantity;
+        quantityFilled = 0;
+        quantityOutstanding = 0;
+    }
 }
