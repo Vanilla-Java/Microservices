@@ -80,7 +80,11 @@ public class OrderManagerTest {
 
             verify(listener);
         } finally {
-            IOTools.shallowDeleteDirWithFiles(queuePath);
+            try {
+                IOTools.shallowDeleteDirWithFiles(queuePath);
+            } catch (Exception e) {
+
+            }
         }
     }
 
@@ -140,8 +144,12 @@ public class OrderManagerTest {
                 assertFalse(reader.readOne());
             }
         } finally {
-            IOTools.shallowDeleteDirWithFiles(queuePath);
-            IOTools.shallowDeleteDirWithFiles(queuePath2);
+            try {
+                IOTools.shallowDeleteDirWithFiles(queuePath);
+                IOTools.shallowDeleteDirWithFiles(queuePath2);
+            } catch (Exception e) {
+
+            }
         }
     }
 
@@ -188,8 +196,12 @@ public class OrderManagerTest {
                 }
             }
         } finally {
-            IOTools.shallowDeleteDirWithFiles(queuePath);
-            IOTools.shallowDeleteDirWithFiles(queuePath2);
+            try {
+                IOTools.shallowDeleteDirWithFiles(queuePath);
+                IOTools.shallowDeleteDirWithFiles(queuePath2);
+            } catch (Exception e) {
+
+            }
         }
     }
 }

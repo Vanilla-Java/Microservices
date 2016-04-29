@@ -103,8 +103,11 @@ public class ComponentsBenchmark {
     public void tearDown() {
         upQueue.close();
         downQueue.close();
-        IOTools.shallowDeleteDirWithFiles(upQueuePath);
-        IOTools.shallowDeleteDirWithFiles(downQueuePath);
+        try {
+            IOTools.shallowDeleteDirWithFiles(upQueuePath);
+            IOTools.shallowDeleteDirWithFiles(downQueuePath);
+        } catch (Exception e) {
+        }
     }
 
     @Benchmark
