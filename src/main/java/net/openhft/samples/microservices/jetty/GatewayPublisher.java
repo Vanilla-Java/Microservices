@@ -1,4 +1,4 @@
-package net.openhft.samples.microservices.trading;
+package net.openhft.samples.microservices.jetty;
 
 /**
  * Created by daniel on 26/04/2016.

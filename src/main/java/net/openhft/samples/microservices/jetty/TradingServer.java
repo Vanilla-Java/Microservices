@@ -1,4 +1,4 @@
-package net.openhft.samples.microservices.trading;
+package net.openhft.samples.microservices.jetty;
 
 import net.openhft.chronicle.core.Jvm;
 import net.openhft.chronicle.websocket.jetty.JettyWebSocketServer;
@@ -15,6 +15,11 @@ public class TradingServer {
         this.server = new JettyWebSocketServer(port);
         server.addService("/*", GatewayPublisher.class, GUIGatewayPublisher::new);
         server.start();
+    }
+
+    public static void main(String[] args) {
+        new TradingServer(7001);
+        System.out.println("Server started");
     }
 
     static class GUIGatewayPublisher implements GUIGateway{
@@ -58,10 +63,5 @@ public class TradingServer {
             System.out.println("New orderStatus received " + orderStatus);
             gatewayPublisher.orderStatus(orderStatus);
         }
-    }
-
-    public static void main(String[] args) {
-        new TradingServer(7001);
-        System.out.println("Server started");
     }
 }

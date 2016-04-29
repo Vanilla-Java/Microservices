@@ -1,4 +1,4 @@
-package net.openhft.samples.microservices.trading;
+package net.openhft.samples.microservices.jetty;
 
 import net.openhft.chronicle.wire.AbstractMarshallable;
 

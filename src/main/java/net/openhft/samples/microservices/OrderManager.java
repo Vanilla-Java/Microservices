@@ -31,7 +31,7 @@ public class OrderManager implements MarketDataListener, OrderIdeaListener {
     public void onOrderIdea(OrderIdea idea) {
         TopOfBookPrice price = priceMap.get(idea.symbol);
         if (price != null && placeOrder(price, idea)) {
-            // remove the price information until we see a market data update to prevent trading until then.
+            // remove the price information until we see a market data update to prevent jetty until then.
             priceMap.remove(idea.symbol);
             return;
         }

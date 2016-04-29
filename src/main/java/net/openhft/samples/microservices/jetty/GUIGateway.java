@@ -1,4 +1,4 @@
-package net.openhft.samples.microservices.trading;
+package net.openhft.samples.microservices.jetty;
 
 public interface GUIGateway {
     void enableMarketData(boolean enabled);
