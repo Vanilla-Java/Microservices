@@ -1,6 +1,7 @@
 package net.openhft.samples.microservices.helloworld;
 
 import net.openhft.chronicle.core.Jvm;
+import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.queue.ChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 import net.openhft.chronicle.wire.MethodReader;
@@ -16,10 +17,13 @@ import static java.lang.System.out;
  */
 public class HelloWorldClientMain {
     public static void main(String[] args) {
+        String input = args.length > 0 ? args[0] : OS.TMP + "/input";
+        String output = args.length > 1 ? args[1] : OS.TMP + "/output";
+
         AtomicLong lastUpdate = new AtomicLong(System.currentTimeMillis() + 1000);
         Thread thread = new Thread(() -> {
-            ChronicleQueue output = SingleChronicleQueueBuilder.binary("output").build();
-            MethodReader reader = output.createTailer().methodReader((HelloReplier) err::println);
+            ChronicleQueue outputQ = SingleChronicleQueueBuilder.binary(output).build();
+            MethodReader reader = outputQ.createTailer().methodReader((HelloReplier) err::println);
             while (!Thread.interrupted()) {
                 if (reader.readOne()) {
                     lastUpdate.set(System.currentTimeMillis());
@@ -31,8 +35,8 @@ public class HelloWorldClientMain {
         thread.setDaemon(true);
         thread.start();
 
-        ChronicleQueue input = SingleChronicleQueueBuilder.binary("input").build();
-        HelloWorld helloWorld = input.createAppender().methodWriter(HelloWorld.class);
+        ChronicleQueue inputQ = SingleChronicleQueueBuilder.binary(input).build();
+        HelloWorld helloWorld = inputQ.createAppender().methodWriter(HelloWorld.class);
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
