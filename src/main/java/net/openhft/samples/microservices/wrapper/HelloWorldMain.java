@@ -1,5 +1,6 @@
 package net.openhft.samples.microservices.wrapper;
 
+import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.queue.service.ServiceWrapper;
 import net.openhft.chronicle.queue.service.ServiceWrapperBuilder;
 
@@ -10,8 +11,9 @@ public class HelloWorldMain {
     static ServiceWrapper serviceWrapper;
 
     public static void main(String... args) {
-        String input = args.length > 0 ? args[0] : "input";
-        String output = args.length > 1 ? args[1] : "output";
+        String input = args.length > 0 ? args[0] : OS.TMP + "/input";
+        String output = args.length > 1 ? args[1] : OS.TMP + "/output";
         serviceWrapper = ServiceWrapperBuilder.serviceBuilder(input, output, HelloReplier.class, HelloWorldImpl::new).get();
+        System.out.println("Started");
     }
 }
