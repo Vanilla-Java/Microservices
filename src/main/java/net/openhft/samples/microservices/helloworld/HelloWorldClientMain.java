@@ -1,4 +1,4 @@
-package net.openhft.samples.microservices.wrapper;
+package net.openhft.samples.microservices.helloworld;
 
 import net.openhft.chronicle.core.Jvm;
 import net.openhft.chronicle.queue.ChronicleQueue;
