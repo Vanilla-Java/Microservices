@@ -10,6 +10,7 @@ public class OrderManager implements MarketDataListener, OrderIdeaListener {
     final OrderListener orderListener;
     final Map<String, TopOfBookPrice> priceMap = new TreeMap<>();
     final Map<String, OrderIdea> ideaMap = new TreeMap<>();
+    long ideaCounter = 0;
 
     public OrderManager(OrderListener orderListener) {
         this.orderListener = orderListener;
@@ -37,6 +38,9 @@ public class OrderManager implements MarketDataListener, OrderIdeaListener {
         }
 
         idea.mergeToMap(ideaMap, i -> i.symbol);
+        ideaCounter++;
+        if (ideaCounter % 1000000 == 0)
+            System.out.println("ideas: " + ideaCounter);
     }
 
     private boolean placeOrder(TopOfBookPrice price, OrderIdea idea) {

@@ -31,14 +31,14 @@ public class OrderManagerTest {
         SidedMarketDataCombiner combiner = new SidedMarketDataCombiner(orderManager);
 
 // events in
-        orderManager.onOrderIdea(new OrderIdea("EURUSD", Side.Buy, 1.1180, 2e6)); // not expected to trigger
+        orderManager.onOrderIdea(new OrderIdea("strategy1", "EURUSD", Side.Buy, 1.1180, 2e6)); // not expected to trigger
 
         combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789000L, Side.Sell, 1.1172, 2e6));
         combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1160, 2e6));
 
         combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1167, 2e6));
 
-        orderManager.onOrderIdea(new OrderIdea("EURUSD", Side.Buy, 1.1165, 1e6)); // expected to trigger
+        orderManager.onOrderIdea(new OrderIdea("strategy1", "EURUSD", Side.Buy, 1.1165, 1e6)); // expected to trigger
 
         verify(listener);
     }
@@ -52,14 +52,14 @@ public class OrderManagerTest {
                 SidedMarketDataCombiner combiner = new SidedMarketDataCombiner((MarketDataListener) orderManager);
 
                 // events in
-                orderManager.onOrderIdea(new OrderIdea("EURUSD", Side.Buy, 1.1180, 2e6)); // not expected to trigger
+                orderManager.onOrderIdea(new OrderIdea("strategy1", "EURUSD", Side.Buy, 1.1180, 2e6)); // not expected to trigger
 
                 combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789000L, Side.Sell, 1.1172, 2e6));
                 combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1160, 2e6));
 
                 combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1167, 2e6));
 
-                orderManager.onOrderIdea(new OrderIdea("EURUSD", Side.Buy, 1.1165, 1e6)); // expected to trigger
+                orderManager.onOrderIdea(new OrderIdea("strategy1", "EURUSD", Side.Buy, 1.1165, 1e6)); // expected to trigger
             }
 
 // what we expect to happen
@@ -98,14 +98,14 @@ public class OrderManagerTest {
                 SidedMarketDataCombiner combiner = new SidedMarketDataCombiner((MarketDataListener) orderManager);
 
                 // events in
-                orderManager.onOrderIdea(new OrderIdea("EURUSD", Side.Buy, 1.1180, 2e6)); // not expected to trigger
+                orderManager.onOrderIdea(new OrderIdea("strategy1", "EURUSD", Side.Buy, 1.1180, 2e6)); // not expected to trigger
 
                 combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789000L, Side.Sell, 1.1172, 2e6));
                 combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1160, 2e6));
 
                 combiner.onSidedPrice(new SidedPrice("EURUSD", 123456789100L, Side.Buy, 1.1167, 2e6));
 
-                orderManager.onOrderIdea(new OrderIdea("EURUSD", Side.Buy, 1.1165, 1e6)); // expected to trigger
+                orderManager.onOrderIdea(new OrderIdea("strategy1", "EURUSD", Side.Buy, 1.1165, 1e6)); // expected to trigger
             }
 
             try (SingleChronicleQueue in = SingleChronicleQueueBuilder.binary(queuePath)
