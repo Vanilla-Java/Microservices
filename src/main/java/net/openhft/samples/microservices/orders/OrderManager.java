@@ -1,4 +1,4 @@
-package net.openhft.samples.microservices;
+package net.openhft.samples.microservices.orders;
 
 import java.util.Map;
 import java.util.TreeMap;

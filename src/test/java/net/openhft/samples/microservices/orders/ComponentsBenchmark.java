@@ -1,4 +1,4 @@
-package net.openhft.samples.microservices;
+package net.openhft.samples.microservices.orders;
 
 import net.openhft.affinity.AffinityLock;
 import net.openhft.chronicle.core.Jvm;

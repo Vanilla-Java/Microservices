@@ -1,4 +1,4 @@
-package net.openhft.samples.microservices;
+package net.openhft.samples.microservices.orders;
 
 /**
  * Created by peter on 24/03/16.
