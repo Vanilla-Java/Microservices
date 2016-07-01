@@ -60,6 +60,7 @@ public class MultiThreadedMain {
 
         @Override
         public void complete() {
+            System.out.println("Cleaning up");
             IOTools.deleteDirWithFiles(queueIn, 2);
             IOTools.deleteDirWithFiles(queue2, 2);
             IOTools.deleteDirWithFiles(queue3, 2);
