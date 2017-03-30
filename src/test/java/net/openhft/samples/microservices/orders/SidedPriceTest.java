@@ -25,7 +25,7 @@ public class SidedPriceTest {
                 "  price: 1.2345,\n" +
                 "  quantity: 1000000.0\n" +
                 "}\n", sp.toString());
-
+        System.out.println(sp);
 // from string
         SidedPrice sp2 = Marshallable.fromString(sp.toString());
         assertEquals(sp2, sp);

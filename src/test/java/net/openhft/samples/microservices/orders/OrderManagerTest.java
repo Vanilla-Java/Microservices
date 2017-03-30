@@ -48,7 +48,7 @@ public class OrderManagerTest {
         File queuePath = new File(OS.TARGET, "testWithQueue-" + System.nanoTime());
         try {
             try (SingleChronicleQueue queue = SingleChronicleQueueBuilder.binary(queuePath).build()) {
-                OrderIdeaListener orderManager = queue.createAppender().methodWriter(OrderIdeaListener.class, MarketDataListener.class);
+                OrderIdeaListener orderManager = queue.acquireAppender().methodWriter(OrderIdeaListener.class, MarketDataListener.class);
                 SidedMarketDataCombiner combiner = new SidedMarketDataCombiner((MarketDataListener) orderManager);
 
                 // events in
