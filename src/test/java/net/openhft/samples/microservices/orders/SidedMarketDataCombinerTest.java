@@ -1,6 +1,5 @@
 package net.openhft.samples.microservices.orders;
 
-import net.openhft.chronicle.core.pool.ClassAliasPool;
 import org.junit.Test;
 
 import static org.easymock.EasyMock.*;
@@ -9,10 +8,6 @@ import static org.easymock.EasyMock.*;
  * Created by peter on 24/03/16.
  */
 public class SidedMarketDataCombinerTest {
-    static {
-        ClassAliasPool.CLASS_ALIASES.addAlias(TopOfBookPrice.class, SidedPrice.class);
-    }
-
     @Test
     public void testOnSidedPrice() {
         MarketDataListener listener = createMock(MarketDataListener.class);

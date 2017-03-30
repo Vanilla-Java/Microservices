@@ -42,9 +42,4 @@ public class TopOfBookPriceTest {
 
         assertEquals(tobp, tobp2);
     }
-
-    @Test
-    public void testCombine() {
-
-    }
 }

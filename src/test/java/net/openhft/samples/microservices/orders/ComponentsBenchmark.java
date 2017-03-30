@@ -87,11 +87,11 @@ public class ComponentsBenchmark {
         String target = OS.TMP;
         upQueuePath = new File(target, "ComponentsBenchmark-up-" + System.nanoTime());
         upQueue = SingleChronicleQueueBuilder.binary(upQueuePath).build();
-        smdWriter = upQueue.createAppender().methodWriter(SidedMarketDataListener.class);
+        smdWriter = upQueue.acquireAppender().methodWriter(SidedMarketDataListener.class);
 
         downQueuePath = new File(target, "ComponentsBenchmark-down-" + System.nanoTime());
         downQueue = SingleChronicleQueueBuilder.binary(downQueuePath).build();
-        MarketDataListener mdWriter = downQueue.createAppender().methodWriter(MarketDataListener.class);
+        MarketDataListener mdWriter = downQueue.acquireAppender().methodWriter(MarketDataListener.class);
 
         SidedMarketDataCombiner combiner = new SidedMarketDataCombiner(mdWriter);
 
